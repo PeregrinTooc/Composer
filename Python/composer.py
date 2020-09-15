@@ -8,5 +8,7 @@ class composer:
     def setYearofDeath(self, year, isExact=True):
         self.YearOfDeath = (year, isExact)
 
-    def setWikiLink(self, link):
-        self.WikiLink = link
+    def setWikiLink(self, url):
+        self.WikiLink = url
+
+    def toJson(self):
