@@ -1,3 +1,14 @@
+import json
+
+class composerString(str):
+    def init(self, string):
+        self = string
+
+    def getBirthYear(self):
+        return self[ 0 : super().find('-') ]
+
+
+
 class composer:
     def init(self, name):
         self.name = name
@@ -12,3 +23,4 @@ class composer:
         self.WikiLink = url
 
     def toJson(self):
+        return none
