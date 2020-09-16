@@ -1,32 +1,44 @@
 import json
 
+
 class composerFactory:
-    __instance = None
+    _instance = None
 
     @staticmethod
     def getFactory():
-        if composerFactory.__instance is None:
-            composerFactory.instance = composerFactory()
-        return composerFactory.instance
+        if composerFactory._instance is None:
+            composerFactory._instance = composerFactory()
+        return composerFactory._instance
 
     def __init__(self):
         self._dates = {}
 
-    def getDate(self, year):
-        result = self._dates[year]
+    def getDate(self, year, imprecise=False):
+        try:
+            result = self._dates[(year, imprecise)]
+        except KeyError:
+            result = composerLifeYear(year, imprecise)
+            self._dates[(year, imprecise)] = result
         return result
 
 
 class composerLifeYear:
 
-    def __init__(self, year):
-        self.year = year
+    def __init__(self, year, imprecise):
+        self._year = year
+        self._imprecise = imprecise
 
 
 class composerString(str):
 
     def getBirthYear(self):
-        return composerFactory.getFactory().getDate(int(self[: self.find('-')]))
+        dateString = self[: self.find('-')]
+        try:
+            result = composerFactory.getFactory().getDate(int(dateString))
+        except ValueError:
+            dateString = dateString[2:]
+            result = composerFactory.getFactory().getDate(int(dateString), True)
+        return result
 
 
 class composer:
