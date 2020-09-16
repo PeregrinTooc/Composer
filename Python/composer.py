@@ -1,16 +1,36 @@
 import json
 
+class composerFactory:
+    __instance = None
+
+    @staticmethod
+    def getFactory():
+        if composerFactory.__instance is None:
+            composerFactory.instance = composerFactory()
+        return composerFactory.instance
+
+    def __init__(self):
+        self._dates = {}
+
+    def getDate(self, year):
+        result = self._dates[year]
+        return result
+
+
+class composerLifeYear:
+
+    def __init__(self, year):
+        self.year = year
+
+
 class composerString(str):
-    def init(self, string):
-        self = string
 
     def getBirthYear(self):
-        return self[ 0 : super().find('-') ]
-
+        return composerFactory.getFactory().getDate(int(self[: self.find('-')]))
 
 
 class composer:
-    def init(self, name):
+    def __init__(self, name):
         self.name = name
 
     def setYearOfBirth(self, year, isExact=True):
@@ -23,4 +43,4 @@ class composer:
         self.WikiLink = url
 
     def toJson(self):
-        return none
+        return None
