@@ -13,31 +13,50 @@ class composerFactory:
     def __init__(self):
         self._dates = {}
 
-    def getDate(self, year, imprecise=False):
+    def getDate(self, year, imprecise=False, after=False, before=False):
         try:
-            result = self._dates[(year, imprecise)]
+            result = self._dates[(year, imprecise, after, before)]
         except KeyError:
-            result = composerLifeYear(year, imprecise)
-            self._dates[(year, imprecise)] = result
+            result = composerLifeYear(year, imprecise, after, before)
+            self._dates[(year, imprecise, after, before)] = result
         return result
 
 
 class composerLifeYear:
 
-    def __init__(self, year, imprecise):
+    def __init__(self, year, imprecise, after, before):
         self._year = year
         self._imprecise = imprecise
+        self._after = after
+        self._before = before
 
 
 class composerString(str):
 
-    def getBirthYear(self):
+    def getYearOfBirth(self):
         dateString = self[: self.find('-')]
         try:
             result = composerFactory.getFactory().getDate(int(dateString))
         except ValueError:
-            dateString = dateString[2:]
-            result = composerFactory.getFactory().getDate(int(dateString), True)
+            if dateString.find('um') > -1:
+                dateString = dateString[2:]
+                result = composerFactory.getFactory().getDate(int(dateString), imprecise=True)
+            else:
+                dateString = dateString[3:]
+                result = composerFactory.getFactory().getDate(int(dateString), before=True)
+        return result
+
+    def getYearOfDeath(self):
+        dateString = self[(self.find('-')+1):self.find('<')]
+        try:
+            result = composerFactory.getFactory().getDate(int(dateString))
+        except ValueError:
+            if dateString.find('um') > -1:
+                dateString = dateString[3:]
+                result = composerFactory.getFactory().getDate(int(dateString), imprecise=True)
+            else:
+                dateString = dateString[5:]
+                result = composerFactory.getFactory().getDate(int(dateString), after=True)
         return result
 
 
