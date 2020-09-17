@@ -1,11 +1,19 @@
+from composer import composer
+from composer import composerString
+
+
 def parse(source, target):
     with open(source, 'r') as source:
         with open(target, 'w') as target:
+            target.write("[\n")
             composers = list(source)
             for item in composers:
-                target.write(item[:-10]+'\n')
+                composerObject = composer(composerString(item))
+                composerJson = composerObject.toJson()+',\n'
+                target.write(composerJson)
+            target.write("]")
 
 
 if __name__ == "__main__":
     import sys
-    parse(int(sys.argv[0], sys.argv[1]))
+    parse(sys.argv[0], sys.argv[1])
