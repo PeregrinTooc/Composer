@@ -2,6 +2,7 @@ import unittest
 from composer import composerString
 from composer import composerFactory
 from composer import composer
+import json
 
 
 class commonTests(unittest.TestCase):
@@ -113,14 +114,20 @@ class toJson(unittest.TestCase):
         composerStringRepr = composerString('1831-1907 <a href="/wiki/Joseph_Joachim" title="Joseph Joachim">Joseph Joachim')
         cut = composer(composerStringRepr)
         actual = cut.toJson()
-        expected = '{"name":"Joseph Joachim","yearOfBirth":"1831","yearOfDeath":"1907","wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"}'
+        expected = json.dumps({"name":"Joseph Joachim",
+                               "yearOfBirth":"1831",
+                               "yearOfDeath":"1907",
+                               "wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"})
         self.assertEqual(actual, expected)
 
     def test_anotherString(self):
         composerStringRepr = composerString('um 1831 - nach 1907 <a href="/wiki/Joseph_Joachim" title="Joseph Joachim">Joseph Joachim')
         cut = composer(composerStringRepr)
         actual = cut.toJson()
-        expected = '{"name":"Joseph Joachim","yearOfBirth":"um 1831","yearOfDeath":"nach 1907","wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"}'
+        expected = json.dumps({"name":"Joseph Joachim",
+                               "yearOfBirth":"um 1831",
+                               "yearOfDeath":"nach 1907",
+                               "wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"})
         self.assertEqual(actual, expected)
 
 

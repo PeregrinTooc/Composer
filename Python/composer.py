@@ -1,3 +1,6 @@
+import json
+
+
 class composerFactory:
     _instance = None
 
@@ -107,10 +110,16 @@ class composer:
         self._WikiLink = composerString.getURL()
 
     def toJson(self):
-        result = '{'
-        result += '"name":"'+self._name+'",'
-        result += '"yearOfBirth":"'+self._YearOfBirth.toString()+'",'
-        result += '"yearOfDeath":"'+self._YearOfDeath.toString()+'",'
-        result += '"wikiLink":"'+self._WikiLink+'"'
-        result += '}'
-        return result
+        mydict = {"name": self._name,
+                  "yearOfBirth": self._YearOfBirth.toString(),
+                  "yearOfDeath": self._YearOfDeath.toString(),
+                  "wikiLink": self._WikiLink
+             }
+        return json.dumps(mydict)
+        ##result = '{'
+        ##result += '"name":"'+self._name+'",'
+        ##result += '"yearOfBirth":"'+self._YearOfBirth.toString()+'",'
+        ##result += '"yearOfDeath":"'+self._YearOfDeath.toString()+'",'
+        ##result += '"wikiLink":"'+self._WikiLink+'"'
+        ##result += '}'
+        ##return result
