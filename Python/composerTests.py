@@ -121,10 +121,10 @@ class toJson(unittest.TestCase):
         self.assertEqual(actual, expected)
 
     def test_anotherString(self):
-        composerStringRepr = composerString('um 1831 - nach 1907 <a href="/wiki/Joseph_Joachim" title="Joseph Joachim">Joseph Joächim')
+        composerStringRepr = composerString('um 1831 - nach 1907 <a href="/wiki/Joseph_Joachim" title="Joseph Joachim">Joseph Joachim')
         cut = composer(composerStringRepr)
         actual = cut.toJson()
-        expected = json.dumps({"name":"Joseph Joächim",
+        expected = json.dumps({"name":"Joseph Joachim",
                                "yearOfBirth":"um 1831",
                                "yearOfDeath":"nach 1907",
                                "wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"})
