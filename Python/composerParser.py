@@ -9,7 +9,9 @@ def parse(source, target):
             composers = list(source)
             for item in composers:
                 composerObject = composer(composerString(item))
-                composerJson = composerObject.toJson()+',\n'
+                print(composerObject)
+                composerJson = composerObject.toJson().replace('\n', '')+',\n'
+                print(composerJson)
                 target.write(composerJson)
             target.write("]")
 
