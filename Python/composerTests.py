@@ -83,9 +83,9 @@ class composerLifeYearToString(commonTests):
 
 class getName(unittest.TestCase):
     def test_OneName(self):
-        cut = composerString('1098-1179 <a href="/wiki/Hildegard_von_Bingen" title="Hildegard von Bingen">Hildegard von Bingen')
+        cut = composerString('1098-1179 <a href="/wiki/Hildegard_von_Bingen" title="Hildegard von Bingen">Hildegärd von Bingen')
         actual = cut.getName()
-        expected = "Hildegard von Bingen"
+        expected = "Hildegärd von Bingen"
         self.assertEqual(actual, expected)
 
     def test_AnotherName(self):
