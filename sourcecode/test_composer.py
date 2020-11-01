@@ -130,6 +130,13 @@ class toJson(unittest.TestCase):
                                "wikiLink":"https://de.wikipedia.org/wiki/Joseph_Joachim"})
         self.assertEqual(actual, expected)
 
+class fromJson(unittest.TestCase):
+    def test_oneItem(self):
+        composerJSON = '{"name": "Christopher Gunning", "yearOfBirth": "1944", "yearOfDeath": "nach ", "wikiLink": "https://de.wikipedia.org/wiki/Christopher_Gunning"}'
+        cut = composer(dictRepresentation = json.loads(composerJSON))
+        actual = cut.toJson()
+        self.assertEqual(actual, composerJSON)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -21,6 +21,30 @@ class composerFactory:
             self._dates[(year, imprecise, after, before)] = result
         return result
 
+    def createAll(self):
+        import os
+        script_path = os.path.abspath(__file__) 
+        print(script_path)
+        
+        script_dir = os.path.split(script_path)[0] #i.e. /path/to/dir/
+        print(script_dir)
+
+        rel_path = 'composers.json'
+        abs_file_path = os.path.join(script_dir, rel_path)
+        print(abs_file_path)
+
+        self._composers = {}
+        with open(abs_file_path, 'r', encoding="utf8") as source:
+            composerJSONs = json.loads(source.read())
+        
+        for composerJSON in composerJSONs:
+            self._composers[composerJSON['name']] = composer(dictRepresentation = composerJSON)
+
+    def displayAll(self):
+        for composer in self._composers.values():
+            print(composer.toString())       
+
+
 
 class composerLifeYear:
 
@@ -40,7 +64,9 @@ class composerLifeYear:
     def _addQualifierIfApplicable(self):
         self._qualifier = ''
         self._determineQualifier()
-        self._string = self._qualifier + self._string
+        if self._string != '':
+            self._string = self._qualifier + self._string        
+    
 
     def _determineQualifier(self):
         if self._imprecise:
@@ -103,23 +129,34 @@ class composerString(str):
 
 
 class composer:
-    def __init__(self, composerString):
-        self._name = composerString.getName()
-        self._YearOfBirth = composerString.getYearOfBirth()
-        self._YearOfDeath = composerString.getYearOfDeath()
-        self._WikiLink = composerString.getURL()
+    def __init__(self, stringRepresentation = '', dictRepresentation = {}):
+        if stringRepresentation != '':
+            self._name = stringRepresentation.getName()
+            self._YearOfBirth = stringRepresentation.getYearOfBirth()
+            self._YearOfDeath = stringRepresentation.getYearOfDeath()
+            self._WikiLink = stringRepresentation.getURL()
+        else:
+            self._name = dictRepresentation['name']
+            dateString = dictRepresentation['yearOfBirth'] + ' - ' + dictRepresentation['yearOfDeath']
+            self._YearOfBirth = composerString(dateString).getYearOfBirth()
+            self._YearOfDeath = composerString(dateString).getYearOfDeath()
+            self._WikiLink = dictRepresentation['wikiLink'] 
 
     def toJson(self):
-        mydict = {"name": self._name,
+        return json.dumps(self.toDict())
+
+    def toString(self):
+        result = ''
+        for k,v in self.toDict().items():
+            result += k +':'+v+', '
+        result[0:-1]
+        return result
+
+    def toDict(self):
+        result = {"name": self._name,
                   "yearOfBirth": self._YearOfBirth.toString(),
                   "yearOfDeath": self._YearOfDeath.toString(),
                   "wikiLink": self._WikiLink
              }
-        return json.dumps(mydict)
-        ##result = '{'
-        ##result += '"name":"'+self._name+'",'
-        ##result += '"yearOfBirth":"'+self._YearOfBirth.toString()+'",'
-        ##result += '"yearOfDeath":"'+self._YearOfDeath.toString()+'",'
-        ##result += '"wikiLink":"'+self._WikiLink+'"'
-        ##result += '}'
-        ##return result
+        return result
+
